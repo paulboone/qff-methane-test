@@ -1,0 +1,30 @@
+#! Sample UHF/6-31G** CH2 computation
+
+memory 250 mb
+
+molecule ch4 {
+  C
+  H   1 1.089000
+  H   1 1.089000  2  109.4710
+  H   1 1.089000  2  109.4710  3  120.0000
+  H   1 1.089000  2  109.4710  3 -120.0000
+}
+
+set basis 6-31G*
+# set basis cc-pVXZ
+# set dft_functional b3lyp
+set hessian_write on
+
+
+optimize('b3lyp')
+# scf_e, scf_wfn = frequencies('scf', return_wfn=True, dertype=1)
+H, scf_wfn = hessian('b3lyp', return_wfn=True, dertype=1)
+print(np.array(H))
+print("=============")
+scf_wfn.hessian().print_out()
+fchk_writer = psi4.FCHKWriter(scf_wfn)
+fchk_writer.write('output.fchk')
+
+set cubeprop_tasks ['esp']
+
+cubeprop(scf_wfn)
