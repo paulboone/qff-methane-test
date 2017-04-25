@@ -30,7 +30,7 @@ energy = fchk.fields.get('Total Energy')
 coords = fchk.fields.get('Current cartesian coordinates').reshape([len(numbers), 3])
 grad = fchk.fields.get('Cartesian Gradient').reshape([len(numbers), 3])
 
-with open("./methane.psi.ch4.57664.hess") as f:
+with open("./methane.psi.ch4.66427.hess") as f:
     f.readline()
     lines = f.readlines()
     elements = np.array([line.split() for line in lines]).ravel()
