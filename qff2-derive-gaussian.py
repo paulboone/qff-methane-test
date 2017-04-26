@@ -3,25 +3,25 @@ from molmod.io.fchk import FCHKFile
 import numpy as np
 
 from quickff.reference import SecondOrderTaylor, get_ei_ff
-from quickff.program import BaseProgram
+from quickff.program import DeriveDiagFF, DeriveNonDiagFF
 from quickff.log import log
 
 import h5py
 
 #define class for deriving the force field
-class Program(BaseProgram):
-    def run(self):
-        with log.section('PROGRAM', 2):
-            #deriving diagonal force field
-            self.do_pt_generate()
-            self.do_pt_estimate()
-            self.average_pars()
-            self.do_hc_estimatefc(['HC_FC_DIAG'])
-            #adding and fitting cross terms
-            self.do_cross_init()
-            self.do_hc_estimatefc(['HC_FC_CROSS'], logger_level=1)
-            #write output
-            self.make_output()
+# class Program(BaseProgram):
+#     def run(self):
+#         with log.section('PROGRAM', 2):
+#             #deriving diagonal force field
+#             self.do_pt_generate()
+#             self.do_pt_estimate()
+#             self.average_pars()
+#             self.do_hc_estimatefc(['HC_FC_DIAG'])
+#             #adding and fitting cross terms
+#             self.do_cross_init()
+#             self.do_hc_estimatefc(['HC_FC_CROSS'], logger_level=1)
+#             #write output
+#             self.make_output()
 
 #load Gaussian Formatted Checkpoint file
 fchk = FCHKFile('./ben.fchk')
@@ -53,5 +53,5 @@ scales = [1.0, 1.0, 1.0, 1.0]
 ff_ei = get_ei_ff('EI', system, charges, scales, radii=None, average=True, pbc=[0,0,0])
 
 #initialize and run program
-program = Program(system, ai, ffrefs=[ff_ei], fn_yaff='pars_cov.txt', plot_traj=True, xyz_traj=True)
+program = DeriveDiagFF(system, ai, ffrefs=[ff_ei], fn_yaff='pars_cov.txt', plot_traj=True, xyz_traj=True)
 program.run()
