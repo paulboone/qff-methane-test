@@ -17,7 +17,6 @@ hess = fchk.get_hessian().reshape([len(numbers), 3, len(numbers), 3])
 
 
 system = System(numbers, coords)
-# system = System.from_file('ben.fchk')
 system.detect_bonds()         # doesn't change anything?
 system.set_standard_masses()  # doesn't change anything?
 

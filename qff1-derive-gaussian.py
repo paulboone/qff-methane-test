@@ -7,7 +7,7 @@ from quickff.model import Model
 
 
 system = System.from_files(['ben.fchk', 'ben.h5'], ei_path='')
-system.read_uff_vdw()
+system.read_uff_vdw() # doesn't seem to affect much with CH4
 system.guess_ffatypes('low')
 system.determine_ics_from_topology()
 
