@@ -29,7 +29,7 @@ guess_ffatypes(system, 'low')
 #construct electrostatic force field from HE charges in gaussian_wpart.h5
 f = h5py.File('./ben.h5')
 charges = f['charges'][:]
-scales = [1.0, 1.0, 1.0, 1.0]
+scales = [0.0, 0.0, 0.5, 1.0]
 ff_ei = get_ei_ff('EI', system, charges, scales, radii=None, average=True, pbc=[0,0,0])
 
 #initialize and run program
