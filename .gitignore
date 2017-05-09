@@ -4,6 +4,5 @@
 *.hess
 *.cube
 *.dat
-*.txt
 .DS_Store
 results/

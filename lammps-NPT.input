@@ -1,0 +1,54 @@
+#
+# Calculates the density of methane using the force field we derived from QuickFF.
+#
+
+units real
+atom_style  full
+dimension       3
+boundary        p p p
+
+neighbor        2 bin  # default
+neigh_modify    every 1 delay 3 check yes
+
+pair_style      lj/cut/coul/cut 14.0
+bond_style      harmonic
+angle_style     harmonic
+# no dihedral in Methane
+#dihedral_style  harmonic
+
+read_data	../results/methane2087.data
+group methane type 1
+
+velocity        all create 100 482748 dist uniform
+
+# pair coefficients from UFF as reported by QuickFF in kJ/mol, and converted to Kcal/mol
+# Kcal / mol, Angstrom
+pair_coeff      1 1 0.104923634 3.431
+pair_coeff      2 2 0.043977104 2.571
+pair_modify mix geometric
+
+# TODO:
+# Assign charges! -0.542 0.135 (e)
+
+# bond coefficients from QuickFF fit in kJ/mol, and converted to Kcal/mol
+# Kcal / mol*Angstrom^2, Angstrom
+bond_coeff      1 734.2228469 1.093
+
+# angle coefficients from QuickFF fit in kJ/mol, and converted to Kcal/mol
+# Kcal/mol*rad^2, theta (degrees)
+angle_coeff     1 66.12531201 109.537
+
+#pair_modify tail on
+timestep        0.1
+
+# Run NPT simulation at 100K and 100 Bar
+# estimated to be liquid with density 446.02 Kg/m^3 from http://www.peacesoftware.de/einigewerte/methan_e.html
+fix           NPT all npt temp 100 100 100 iso 100 100 1000.0 drag 0.0
+
+#dump myDump all xyz 10000 dump.atom.*.xyz
+# print volume temperature pressure density
+thermo_style custom step vol temp press density
+thermo         100
+restart        50000 ch4-QuickFF.restart.*
+dump myDump all xyz 10000 ch4-QuickFF.dump.*.xyz
+run           1000000

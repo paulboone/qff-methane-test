@@ -1,0 +1,9 @@
+
+tolerance 2.0
+
+output results/methane2087.pdb
+filetype pdb
+structure inputs/methane.pdb
+  number 2087
+  inside box 0. 0. 0. 50.0 50.0 50.0
+end structure
